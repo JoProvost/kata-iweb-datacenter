@@ -3,7 +3,7 @@ package com.joprovost.kata.datacenter;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class Server {
+public class Server implements Comparable<Server>{
    private final int capacity;
    private final Collection<Vm> vms = new HashSet<Vm>();
 
@@ -22,5 +22,18 @@ public class Server {
          usage += vm.size();
       }
       return usage;
+   }
+
+   public boolean contains(Vm vm) {
+      return vms.contains(vm);
+   }
+
+   @Override
+   public int compareTo(Server server) {
+      if (server.capacity == 0)
+         return 1;
+      if (capacity == 0)
+         return -1;
+      return Double.compare((usedCapacity() / (double) capacity), (server.usedCapacity() / (double) server.capacity));
    }
 }

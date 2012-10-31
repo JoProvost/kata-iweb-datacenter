@@ -1,5 +1,6 @@
 package com.joprovost.kata.datacenter.utils;
 
+import com.joprovost.kata.datacenter.Datacenter;
 import com.joprovost.kata.datacenter.Server;
 import com.joprovost.kata.datacenter.Vm;
 
@@ -16,5 +17,9 @@ public class AddOperation {
 
    public boolean to(final Server server) {
       return server.add(vm);
+   }
+
+   public Boolean to(Datacenter datacenter) {
+      return datacenter.add(vm);
    }
 }
