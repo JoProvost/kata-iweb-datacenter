@@ -1,11 +1,8 @@
 package com.joprovost.kata.datacenter;
 
-import com.joprovost.kata.datacenter.utils.Builder;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import static com.joprovost.kata.datacenter.utils.DatacenterBuilder.datacenter;
 import static com.joprovost.kata.datacenter.utils.AddOperation.adding;
 import static com.joprovost.kata.datacenter.utils.Helpers.*;
 import static com.joprovost.kata.datacenter.utils.ServerBuilder.server;
@@ -54,22 +51,5 @@ public class DatacenterTest {
             works());
 
       andThat(lessUsedServer.contains(aVm));
-   }
-
-   private DatacenterBuilder datacenter() {
-      return new DatacenterBuilder();
-   }
-
-   public static class DatacenterBuilder implements Builder<Datacenter> {
-      private final Collection<Server> servers = new ArrayList<Server>();
-      @Override
-      public Datacenter build() {
-         return new Datacenter(servers);
-      }
-
-      public DatacenterBuilder with(Server server) {
-         servers.add(server);
-         return this;
-      }
    }
 }
