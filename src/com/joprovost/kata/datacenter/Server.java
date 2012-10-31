@@ -16,14 +16,6 @@ public class Server implements Comparable<Server>{
       return capacity - usedCapacity() >= vm.size() && vms.add(vm);
    }
 
-   private int usedCapacity() {
-      int usage = 0;
-      for (final Vm vm : vms) {
-         usage += vm.size();
-      }
-      return usage;
-   }
-
    public boolean contains(Vm vm) {
       return vms.contains(vm);
    }
@@ -34,6 +26,18 @@ public class Server implements Comparable<Server>{
          return 1;
       if (capacity == 0)
          return -1;
-      return Double.compare((usedCapacity() / (double) capacity), (server.usedCapacity() / (double) server.capacity));
+      return Double.compare(serverLoad(), server.serverLoad());
+   }
+
+   private int usedCapacity() {
+      int usage = 0;
+      for (final Vm vm : vms) {
+         usage += vm.size();
+      }
+      return usage;
+   }
+
+   private double serverLoad() {
+      return (usedCapacity() / (double) capacity);
    }
 }
