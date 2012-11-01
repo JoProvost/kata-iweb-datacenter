@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class Server implements Comparable<Server>{
+public class Server {
    private final int capacity;
    private final Collection<Vm> vms =
          Collections.synchronizedCollection(new HashSet<Vm>());
@@ -22,15 +22,6 @@ public class Server implements Comparable<Server>{
       return vms.contains(vm);
    }
 
-   @Override
-   public int compareTo(Server server) {
-      if (server.capacity == 0)
-         return 1;
-      if (capacity == 0)
-         return -1;
-      return Double.compare(serverLoad(), server.serverLoad());
-   }
-
    private int usedCapacity() {
       int usage = 0;
       for (final Vm vm : vms) {
@@ -39,7 +30,8 @@ public class Server implements Comparable<Server>{
       return usage;
    }
 
-   private double serverLoad() {
+   public double load() {
+      if (capacity == 0) return 1.0;
       return (usedCapacity() / (double) capacity);
    }
 }
