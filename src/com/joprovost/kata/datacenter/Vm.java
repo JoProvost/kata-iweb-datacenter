@@ -12,4 +12,12 @@ public class Vm {
    public int size() {
       return size;
    }
+
+   public boolean equals(Object o) {
+      if (o instanceof Vm) {
+         Vm vm = (Vm) o;
+         return id.equals(vm.id) && size == vm.size;
+      }
+      return false;
+   }
 }

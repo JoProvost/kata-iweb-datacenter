@@ -1,5 +1,6 @@
 package com.joprovost.kata.datacenter;
 
+import com.google.gson.Gson;
 import org.junit.Test;
 
 import static com.joprovost.kata.datacenter.utils.AddOperation.adding;
@@ -9,6 +10,8 @@ import static com.joprovost.kata.datacenter.utils.Helpers.works;
 import static com.joprovost.kata.datacenter.utils.ServerBuilder.server;
 import static com.joprovost.kata.datacenter.utils.VmBuilder.vm;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
 public class ServerTest {
@@ -57,7 +60,21 @@ public class ServerTest {
       assertThat(theLoadOf(a(server().withCapacity(20).containing(a(vm().withSize(5))))), is(25));
    }
 
+   @Test
+   public void anEmptyServerCanBeImportedFromJson()
+   {
+      assertThat(theServerCreatedFromJson("{\"id\":\"Server1\",\"capacity\":1}"), equalTo(a(server().withId("Server1").withCapacity(1))));
 
+      assertThat(theServerCreatedFromJson("{\"id\":\"Server1\",\"capacity\":1}"), not(equalTo(a(server().withId("Server2").withCapacity(1)))));
+      assertThat(theServerCreatedFromJson("{\"id\":\"Server1\",\"capacity\":1}"), not(equalTo(a(server().withId("Server1").withCapacity(2)))));
+   }
+
+
+
+   private Server theServerCreatedFromJson(String json) {
+      Gson gson = new Gson();
+      return gson.fromJson(json, Server.class);
+   }
 
    private static int theLoadOf(Server server)
    {

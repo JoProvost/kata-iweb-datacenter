@@ -34,6 +34,14 @@ public class Server {
       return usePercentage;
    }
 
+   public boolean equals(Object o) {
+      if (o instanceof Server) {
+         Server server = (Server) o;
+         return id.equals(server.id) && capacity == server.capacity;
+      }
+      return false;
+   }
+
    private int usedCapacity() {
       int usage = 0;
       for (final Vm vm : virtualMachines) {
