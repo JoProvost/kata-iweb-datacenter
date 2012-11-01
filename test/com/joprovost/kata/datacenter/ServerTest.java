@@ -43,24 +43,24 @@ public class ServerTest {
    }
 
    @Test
-   public void aServerWithNoCapacityShowsALoadOf1() {
-      assertThat(theLoadOf(a(server().withCapacity(0))), is(1.0));
+   public void aServerWithNoCapacityShowsALoadOf100() {
+      assertThat(theLoadOf(a(server().withCapacity(0))), is(100));
    }
 
    @Test
-   public void aServerWithCapacity5AndAVmOfSize5ShowsALoadOf1() {
-      assertThat(theLoadOf(a(server().withCapacity(5).containing(a(vm().withSize(5))))), is(1.0));
+   public void aServerWithCapacity5AndAVmOfSize5ShowsALoadOf100() {
+      assertThat(theLoadOf(a(server().withCapacity(5).containing(a(vm().withSize(5))))), is(100));
    }
 
    @Test
-   public void aServerWithCapacity20AndAVmOfSize5ShowsALoadOf0_25() {
-      assertThat(theLoadOf(a(server().withCapacity(20).containing(a(vm().withSize(5))))), is(.25));
+   public void aServerWithCapacity20AndAVmOfSize5ShowsALoadOf25() {
+      assertThat(theLoadOf(a(server().withCapacity(20).containing(a(vm().withSize(5))))), is(25));
    }
 
 
 
-   private static double theLoadOf(Server server)
+   private static int theLoadOf(Server server)
    {
-      return server.load();
+      return server.usePercentage();
    }
 }

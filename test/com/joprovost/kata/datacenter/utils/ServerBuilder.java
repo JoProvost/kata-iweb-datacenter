@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ServerBuilder implements Builder<Server> {
+   private String id;
    private int capacity;
    private final Collection<Vm> vms = new ArrayList<Vm>();
 
@@ -16,7 +17,7 @@ public class ServerBuilder implements Builder<Server> {
 
    @Override
    public Server build() {
-      return new Server(capacity, vms);
+      return new Server(id, capacity, vms);
    }
 
    public ServerBuilder withCapacity(final int i) {
@@ -26,6 +27,11 @@ public class ServerBuilder implements Builder<Server> {
 
    public ServerBuilder containing(Vm vm) {
       vms.add(vm);
+      return this;
+   }
+
+   public ServerBuilder withId(final String id) {
+      this.id = id;
       return this;
    }
 }

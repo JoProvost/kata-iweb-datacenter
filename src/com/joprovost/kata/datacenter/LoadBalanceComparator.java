@@ -5,6 +5,6 @@ import java.util.Comparator;
 public class LoadBalanceComparator implements Comparator<Server> {
    @Override
    public int compare(Server first, Server second) {
-      return Double.compare(first.load(), second.load());
+      return Integer.valueOf(first.usePercentage()).compareTo(second.usePercentage());
    }
 }

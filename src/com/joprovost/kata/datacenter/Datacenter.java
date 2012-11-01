@@ -1,12 +1,14 @@
 package com.joprovost.kata.datacenter;
 
+import com.google.gson.Gson;
+
 import java.util.*;
 
 public class Datacenter {
    private final List<Server> servers =
          Collections.synchronizedList(new ArrayList<Server>());
 
-   private final Comparator<Server> comparator =
+   private final transient Comparator<Server> comparator =
          new LoadBalanceComparator();
 
    public Datacenter(Collection<Server> servers) {

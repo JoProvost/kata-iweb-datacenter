@@ -1,5 +1,6 @@
 package com.joprovost.kata.datacenter;
 
+import com.google.gson.Gson;
 import org.junit.Test;
 
 import static com.joprovost.kata.datacenter.utils.DatacenterBuilder.datacenter;
@@ -7,6 +8,7 @@ import static com.joprovost.kata.datacenter.utils.AddOperation.adding;
 import static com.joprovost.kata.datacenter.utils.Helpers.*;
 import static com.joprovost.kata.datacenter.utils.ServerBuilder.server;
 import static com.joprovost.kata.datacenter.utils.VmBuilder.vm;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class DatacenterTest {
@@ -71,5 +73,38 @@ public class DatacenterTest {
       Vm anotherVm = a(vm().withSize(2));
       assertThat(adding(anotherVm).to(datacenter),works());
       andThat(secondLessUsedServer.contains(anotherVm));
+   }
+
+   @Test
+   public void anEmptyDatacenterExportedInJsonShowsCorrectOutput() {
+      assertThat(
+            theJsonOutputOf(a(datacenter())),
+            is("{\"servers\":[]}"));
+   }
+
+   @Test
+   public void aDatacenterWithAnEmptyServerExportedInJsonShowsCorrectOutput() {
+      assertThat(
+            theJsonOutputOf(a(datacenter()
+                  .with(a(server().withId("server1").withCapacity(4)))
+            )),
+            is("{\"servers\":[{\"id\":\"server1\",\"capacity\":4,\"usePercentage\":0,\"virtualMachines\":[]}]}"));
+   }
+
+   @Test
+   public void aDatacenterWithAServerWithAVmExportedInJsonShowsCorrectOutput() {
+      assertThat(
+            theJsonOutputOf(a(datacenter()
+                  .with(a(server().withId("server1").withCapacity(4).containing(
+                        a(vm().withId("VM1").withSize(1))
+                  )))
+            )),
+            is("{\"servers\":[{\"id\":\"server1\",\"capacity\":4,\"usePercentage\":25,\"virtualMachines\":[{\"id\":\"VM1\",\"size\":1}]}]}"));
+   }
+
+
+   private String theJsonOutputOf(Datacenter datacenter) {
+      Gson gson = new Gson();
+      return gson.toJson(datacenter);
    }
 }
