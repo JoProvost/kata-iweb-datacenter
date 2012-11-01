@@ -38,7 +38,7 @@ public class DatacenterTest {
    @Test
    public void addingAVmToADatacenterAddsTheVmToTheLessUsedServer() {
       Vm aVm = a(vm().withSize(1));
-      Server lessUsedServer = a(server().withCapacity(15).containing(a(vm().withSize(8))));
+      Server lessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6))));
 
       assertThat(
             adding(aVm)
@@ -51,5 +51,25 @@ public class DatacenterTest {
             works());
 
       andThat(lessUsedServer.contains(aVm));
+   }
+
+   @Test
+   public void addingTwoVmsToADatacenterAddsTheVmToTheLessUsedServer() {
+      Server lessUsedServer = a(server().withCapacity(11).containing(a(vm().withSize(6))));
+      Server secondLessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6))));
+
+      Datacenter datacenter = a(datacenter()
+            .with(secondLessUsedServer)
+            .with(lessUsedServer)
+            .with(a(server().withCapacity(100).containing(a(vm().withSize(70)))))
+            .with(a(server().withCapacity(1000).containing(a(vm().withSize(750))))));
+
+      Vm aVm = a(vm().withSize(2));
+      assertThat(adding(aVm).to(datacenter),works());
+      andThat(lessUsedServer.contains(aVm));
+
+      Vm anotherVm = a(vm().withSize(2));
+      assertThat(adding(anotherVm).to(datacenter),works());
+      andThat(secondLessUsedServer.contains(anotherVm));
    }
 }

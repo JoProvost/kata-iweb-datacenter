@@ -1,11 +1,13 @@
 package com.joprovost.kata.datacenter;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class Server implements Comparable<Server>{
    private final int capacity;
-   private final Collection<Vm> vms = new HashSet<Vm>();
+   private final Collection<Vm> vms =
+         Collections.synchronizedCollection(new HashSet<Vm>());
 
    public Server(final int capacity, final Collection<Vm> vms) {
       this.capacity = capacity;
