@@ -1,5 +1,6 @@
 package com.joprovost.kata.datacenter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,13 +10,19 @@ public class Server {
    private final int capacity;
    private int usePercentage;
    private final Collection<Vm> virtualMachines =
-         Collections.synchronizedCollection(new HashSet<Vm>());
+         Collections.synchronizedCollection(new ArrayList<Vm>());
 
    public Server(String id, final int capacity, final Collection<Vm> virtualMachines) {
       this.id = id;
       this.capacity = capacity;
       this.virtualMachines.addAll(virtualMachines);
       updateUsePercentage();
+   }
+
+   private Server() {
+      this.id = "";
+      this.capacity = 0;
+      this.usePercentage = 0;
    }
 
    public boolean add(final Vm vm) {

@@ -16,8 +16,12 @@ public class Vm {
    public boolean equals(Object o) {
       if (o instanceof Vm) {
          Vm vm = (Vm) o;
-         return id.equals(vm.id) && size == vm.size;
+         return areEqual(id, vm.id) && size == vm.size;
       }
       return false;
+   }
+
+   private static boolean areEqual(Object o1, Object o2) {
+      return o1 == o2 || o1 != null && o2 != null && o1.equals(o2);
    }
 }
