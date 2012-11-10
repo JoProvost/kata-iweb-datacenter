@@ -1,5 +1,6 @@
 package com.joprovost.kata.datacenter.utils;
 
+import com.joprovost.kata.datacenter.core.server.ServerCore;
 import com.joprovost.kata.datacenter.Server;
 import com.joprovost.kata.datacenter.Vm;
 
@@ -17,7 +18,7 @@ public class ServerBuilder implements Builder<Server> {
 
    @Override
    public Server build() {
-      return new Server(id, capacity, vms);
+      return new ServerCore(id, capacity, vms);
    }
 
    public ServerBuilder withCapacity(final int i) {

@@ -4,12 +4,21 @@ public class Vm {
    private final String id;
    private final int size;
 
+   private Vm() {
+      id = null;
+      size = 0;
+   }
+
    public Vm(final String id, final int size) {
       this.id = id;
       this.size = size;
    }
 
-   public int size() {
+   public String getId() {
+      return id;
+   }
+
+   public int getSize() {
       return size;
    }
 

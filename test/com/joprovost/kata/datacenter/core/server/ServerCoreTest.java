@@ -1,6 +1,7 @@
-package com.joprovost.kata.datacenter;
+package com.joprovost.kata.datacenter.core.server;
 
 import com.google.gson.Gson;
+import com.joprovost.kata.datacenter.Server;
 import org.junit.Test;
 
 import static com.joprovost.kata.datacenter.utils.AddOperation.adding;
@@ -14,7 +15,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
-public class ServerTest {
+public class ServerCoreTest {
    @Test
    public void addingAVmToAnEmptyServerWorks() {
       assertThat(adding(a(vm().withSize(1))).to(a(server().withCapacity(1))), works());
@@ -71,9 +72,9 @@ public class ServerTest {
 
 
 
-   private Server theServerCreatedFromJson(String json) {
+   private ServerCore theServerCreatedFromJson(String json) {
       Gson gson = new Gson();
-      return gson.fromJson(json, Server.class);
+      return gson.fromJson(json, ServerCore.class);
    }
 
    private static int theLoadOf(Server server)

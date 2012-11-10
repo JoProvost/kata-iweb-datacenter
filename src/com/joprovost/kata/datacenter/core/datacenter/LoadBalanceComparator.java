@@ -1,4 +1,6 @@
-package com.joprovost.kata.datacenter;
+package com.joprovost.kata.datacenter.core.datacenter;
+
+import com.joprovost.kata.datacenter.Server;
 
 import java.util.Comparator;
 
