@@ -118,7 +118,7 @@ public class DatacenterCoreTest {
       Vm aVm;
 
       given(a(primaryAdapter().of(serverCore = a(server().withCapacity(2))).onTcpPort(34568)));
-      given(datacenterCore = a(datacenterPort()));
+      given(datacenterCore = a(datacenter()));
       given(aVm = a(vm().withSize(2).withId("allo")));
 
       datacenterCore.registerServer("127.0.0.1", 34568);
@@ -146,7 +146,7 @@ public class DatacenterCoreTest {
    {
    }
 
-   private Builder<Datacenter> datacenterPort() {
+   private Builder<Datacenter> datacenter() {
       return new Builder<Datacenter>() {
          @Override
          public Datacenter build() {
