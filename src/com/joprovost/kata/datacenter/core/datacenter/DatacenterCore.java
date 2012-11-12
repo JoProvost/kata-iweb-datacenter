@@ -40,7 +40,7 @@ public class DatacenterCore implements Datacenter {
    public boolean registerServer(String address, int port) {
       try {
          Server server = secondaryAdapterFactory.createSecondaryAdapter(new InetSocketAddress(address, port), Server.class);
-         registerServer(server);
+         addServer(server);
          return true;
       } catch (IOException e) {
          e.printStackTrace();
@@ -48,7 +48,7 @@ public class DatacenterCore implements Datacenter {
       }
    }
 
-   public void registerServer(Server server) {
+   public void addServer(Server server) {
       this.servers.add(server);
       this.sortedServers.add(server);
       Collections.sort(this.sortedServers, comparator);

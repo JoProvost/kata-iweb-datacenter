@@ -48,40 +48,40 @@ public class DatacenterCoreTest {
 
    @Test
    public void addingAVmToADatacenterAddsTheVmToTheLessUsedServer() {
-      Vm aVm = a(vm().withSize(1));
-      Server lessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6))));
+      Vm theVm;
+      Server theLessUsedServer;
 
       assertThat(
-            adding(aVm)
+            adding(theVm = a(vm().withSize(1)))
                   .to(a(datacenter()
                         .with(a(server().withCapacity(10).containing(a(vm().withSize(7)))))
-                        .with(lessUsedServer)
+                        .with(theLessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6)))))
                         .with(a(server().withCapacity(100).containing(a(vm().withSize(70)))))
                         .with(a(server().withCapacity(1000).containing(a(vm().withSize(750)))))
                   )),
             works());
 
-      andThat(lessUsedServer.contains(aVm));
+      andThat(theLessUsedServer.contains(theVm));
    }
 
    @Test
    public void addingTwoVmsToADatacenterAddsTheVmToTheLessUsedServer() {
-      Server lessUsedServer = a(server().withCapacity(11).containing(a(vm().withSize(6))));
-      Server secondLessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6))));
+      Server theLessUsedServer;
+      Server theSecondLessUsedServer;
 
       Datacenter datacenter = a(datacenter()
-            .with(secondLessUsedServer)
-            .with(lessUsedServer)
+            .with(theSecondLessUsedServer = a(server().withCapacity(10).containing(a(vm().withSize(6)))))
+            .with(theLessUsedServer = a(server().withCapacity(11).containing(a(vm().withSize(6)))))
             .with(a(server().withCapacity(100).containing(a(vm().withSize(70)))))
             .with(a(server().withCapacity(1000).containing(a(vm().withSize(750))))));
 
-      Vm aVm = a(vm().withSize(2));
-      assertThat(adding(aVm).to(datacenter),works());
-      andThat(lessUsedServer.contains(aVm));
+      Vm theVm;
+      assertThat(adding(theVm = a(vm().withSize(2))).to(datacenter), works());
+      andThat(theLessUsedServer.contains(theVm));
 
-      Vm anotherVm = a(vm().withSize(2));
-      assertThat(adding(anotherVm).to(datacenter),works());
-      andThat(secondLessUsedServer.contains(anotherVm));
+      Vm anotherVm;
+      assertThat(adding(anotherVm = a(vm().withSize(2))).to(datacenter), works());
+      andThat(theSecondLessUsedServer.contains(anotherVm));
    }
 
    @Test
@@ -113,18 +113,15 @@ public class DatacenterCoreTest {
 
    @Test
    public void addingAVmToADatacenterWithARegisteredRemoteServerAddsTheVmToTheRemoteServer() throws Exception {
-      Server serverCore;
-      Datacenter datacenterCore;
-      Vm aVm;
+      Server theServer;
+      given(a(primaryAdapter().of(theServer = a(server().withCapacity(2))).onTcpPort(34568)));
 
-      given(a(primaryAdapter().of(serverCore = a(server().withCapacity(2))).onTcpPort(34568)));
-      given(datacenterCore = a(datacenter()));
-      given(aVm = a(vm().withSize(2).withId("allo")));
-
-      datacenterCore.registerServer("127.0.0.1", 34568);
-      datacenterCore.add(aVm);
-
-      assertThat(serverCore.contains(aVm), is(true));
+      Vm theVm;
+      assertThat(
+            adding(theVm = a(vm().withSize(2).withId("allo")))
+                  .to(a(datacenter().associatedToServer("127.0.0.1", 34568))),
+            works());
+      andThat(theServer.contains(theVm));
    }
 
 
@@ -141,18 +138,4 @@ public class DatacenterCoreTest {
    {
       primaryAdapter.start();
    }
-
-   private void given(Object o)
-   {
-   }
-
-   private Builder<Datacenter> datacenter() {
-      return new Builder<Datacenter>() {
-         @Override
-         public Datacenter build() {
-            return new DatacenterCore(new JsonRpcSecondaryAdapterFactory());
-         }
-      };
-   }
-
 }

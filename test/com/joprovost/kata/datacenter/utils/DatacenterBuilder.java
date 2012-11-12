@@ -6,12 +6,9 @@ import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 import com.joprovost.kata.datacenter.Datacenter;
 import com.joprovost.kata.datacenter.Server;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class DatacenterBuilder implements Builder<Datacenter> {
-   private final Collection<Server> servers = new ArrayList<Server>();
    private final SecondaryAdapterFactory secondaryAdapterFactory = new JsonRpcSecondaryAdapterFactory();
+   private final DatacenterCore datacenter = new DatacenterCore(secondaryAdapterFactory);
 
    public static DatacenterBuilder datacenter() {
       return new DatacenterBuilder();
@@ -19,13 +16,16 @@ public class DatacenterBuilder implements Builder<Datacenter> {
 
    @Override
    public Datacenter build() {
-      DatacenterCore datacenter = new DatacenterCore(secondaryAdapterFactory);
-      datacenter.registerServers(servers);
       return datacenter;
    }
 
    public DatacenterBuilder with(Server server) {
-      servers.add(server);
+      datacenter.addServer(server);
+      return this;
+   }
+
+   public DatacenterBuilder associatedToServer(String address, int port) {
+      datacenter.registerServer(address, port);
       return this;
    }
 }
