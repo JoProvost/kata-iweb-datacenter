@@ -112,7 +112,7 @@ public class DatacenterCoreTest {
    }
 
    @Test
-   public void runningTheApplicationTwiceAsAServerAndAsADatacenterShowsExpectedJsonOutput() throws Exception {
+   public void addingAVmToADatacenterWithARegisteredRemoteServerAddsTheVmToTheRemoteServer() throws Exception {
       Server serverCore;
       Datacenter datacenterCore;
       Vm aVm;
