@@ -1,5 +1,8 @@
 package com.joprovost.kata.datacenter.adapters.jsonrpc;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.googlecode.jsonrpc4j.StreamServer;
 import com.joprovost.kata.datacenter.adapters.PrimaryAdapter;
@@ -19,7 +22,9 @@ public class JsonRpcPrimaryAdapterFactory implements PrimaryAdapterFactory<Serve
       private final ServerSocket serverSocket;
 
       public JsonRpcSocketServerPrimaryAdapter(Object portImplementation, ServerSocket serverSocket) {
-         JsonRpcServer jsonRpcServer = new JsonRpcServer(portImplementation);
+         ObjectMapper mapper = new ObjectMapper();
+         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+         JsonRpcServer jsonRpcServer = new JsonRpcServer(mapper, portImplementation);
          this.serverSocket = serverSocket;
          streamServer = new StreamServer(jsonRpcServer, maxThreads, serverSocket);
       }

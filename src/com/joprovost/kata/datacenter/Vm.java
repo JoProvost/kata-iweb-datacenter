@@ -14,10 +14,6 @@ public class Vm {
       this.size = size;
    }
 
-   public String getId() {
-      return id;
-   }
-
    public int getSize() {
       return size;
    }

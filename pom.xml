@@ -24,12 +24,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.2.2</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.googlecode</groupId>
       <artifactId>jsonrpc4j</artifactId>
       <version>0.25</version>

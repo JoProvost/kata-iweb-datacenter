@@ -34,35 +34,27 @@ public class ApplicationTest {
                   "}"),
 
             shows("{\n" +
-                  "  \"servers\": [\n" +
-                  "    {\n" +
-                  "      \"id\": \"server1\",\n" +
-                  "      \"capacity\": 4,\n" +
-                  "      \"usePercentage\": 75,\n" +
-                  "      \"virtualMachines\": [\n" +
-                  "        {\n" +
-                  "          \"id\": \"VM1\",\n" +
-                  "          \"size\": 1\n" +
-                  "        },\n" +
-                  "        {\n" +
-                  "          \"id\": \"VM3\",\n" +
-                  "          \"size\": 2\n" +
-                  "        }\n" +
-                  "      ]\n" +
-                  "    },\n" +
-                  "    {\n" +
-                  "      \"id\": \"server2\",\n" +
-                  "      \"capacity\": 6,\n" +
-                  "      \"usePercentage\": 66,\n" +
-                  "      \"virtualMachines\": [\n" +
-                  "        {\n" +
-                  "          \"id\": \"VM2\",\n" +
-                  "          \"size\": 4\n" +
-                  "        }\n" +
-                  "      ]\n" +
-                  "    }\n" +
-                  "  ]\n" +
-                  "}\n"));
+                  "  \"servers\" : [ {\n" +
+                  "    \"id\" : \"server1\",\n" +
+                  "    \"capacity\" : 4,\n" +
+                  "    \"usePercentage\" : 75,\n" +
+                  "    \"virtualMachines\" : [ {\n" +
+                  "      \"id\" : \"VM1\",\n" +
+                  "      \"size\" : 1\n" +
+                  "    }, {\n" +
+                  "      \"id\" : \"VM3\",\n" +
+                  "      \"size\" : 2\n" +
+                  "    } ]\n" +
+                  "  }, {\n" +
+                  "    \"id\" : \"server2\",\n" +
+                  "    \"capacity\" : 6,\n" +
+                  "    \"usePercentage\" : 66,\n" +
+                  "    \"virtualMachines\" : [ {\n" +
+                  "      \"id\" : \"VM2\",\n" +
+                  "      \"size\" : 4\n" +
+                  "    } ]\n" +
+                  "  } ]\n" +
+                  "}"));
    }
 
 
@@ -71,7 +63,7 @@ public class ApplicationTest {
       return equalTo(output);
    }
 
-   private String runningTheApplicationWith(String input) {
+   private String runningTheApplicationWith(String input) throws IOException {
       InputStream in = System.in;
       PrintStream out = System.out;
 

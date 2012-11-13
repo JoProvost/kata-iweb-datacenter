@@ -1,12 +1,16 @@
 package com.joprovost.kata.datacenter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.joprovost.kata.datacenter.adapters.jsonrpc.JsonRpcSecondaryAdapterFactory;
 import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 import com.joprovost.kata.datacenter.core.server.ServerCore;
 
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Application {
@@ -17,14 +21,27 @@ public class Application {
    private final Collection<Vm> virtualMachines =
          Collections.synchronizedCollection(new ArrayList<Vm>());
 
-   public static void main(String[] args) {
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      Application application = gson.fromJson(new InputStreamReader(System.in), Application.class);
+   public static void main(String[] args) throws IOException {
+      Application application = fromJson(System.in, Application.class);
       DatacenterCore datacenter = new DatacenterCore(new JsonRpcSecondaryAdapterFactory());
       datacenter.registerServers(new ArrayList<Server>(application.servers));
       for (Vm vm : application.virtualMachines) {
          datacenter.add(vm);
       }
-      System.out.println(gson.toJson(datacenter));
+      toJson(System.out, datacenter);
    }
+
+   private static <T> T fromJson(InputStream json, Class<T> clazz) throws IOException {
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+      return mapper.readValue(json, clazz);
+   }
+
+   private static void toJson(OutputStream json, Object object) throws IOException {
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+      ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+      writer.writeValue(json, object);
+   }
+
 }

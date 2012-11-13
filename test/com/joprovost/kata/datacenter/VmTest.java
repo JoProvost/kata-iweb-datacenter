@@ -1,9 +1,9 @@
 package com.joprovost.kata.datacenter;
 
-import com.google.gson.Gson;
 import org.junit.Test;
 
 import static com.joprovost.kata.datacenter.utils.Helpers.a;
+import static com.joprovost.kata.datacenter.utils.Helpers.fromJson;
 import static com.joprovost.kata.datacenter.utils.VmBuilder.vm;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -20,7 +20,6 @@ public class VmTest {
    }
 
    private Vm theVmCreatedFromJson(String json) {
-      Gson gson = new Gson();
-      return gson.fromJson(json, Vm.class);
+      return fromJson(json, Vm.class);
    }
 }

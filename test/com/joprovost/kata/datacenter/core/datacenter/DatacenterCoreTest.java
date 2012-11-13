@@ -1,12 +1,9 @@
 package com.joprovost.kata.datacenter.core.datacenter;
 
-import com.google.gson.Gson;
 import com.joprovost.kata.datacenter.adapters.PrimaryAdapter;
-import com.joprovost.kata.datacenter.adapters.jsonrpc.JsonRpcSecondaryAdapterFactory;
 import com.joprovost.kata.datacenter.Datacenter;
 import com.joprovost.kata.datacenter.Server;
 import com.joprovost.kata.datacenter.Vm;
-import com.joprovost.kata.datacenter.utils.Builder;
 import com.joprovost.kata.datacenter.utils.PrimaryAdapterBuilder;
 import org.junit.Test;
 
@@ -114,7 +111,7 @@ public class DatacenterCoreTest {
    @Test
    public void addingAVmToADatacenterWithARegisteredRemoteServerAddsTheVmToTheRemoteServer() throws Exception {
       Server theServer;
-      given(a(primaryAdapter().of(theServer = a(server().withCapacity(2))).onTcpPort(34568)));
+      given(a(primaryAdapter().onTcpPort(34568).of(theServer = a(server().withCapacity(2)))));
 
       Vm theVm;
       assertThat(
@@ -126,8 +123,7 @@ public class DatacenterCoreTest {
 
 
    private String theJsonOutputOf(Datacenter datacenter) {
-      Gson gson = new Gson();
-      return gson.toJson(datacenter);
+      return toJson(datacenter);
    }
 
    private PrimaryAdapterBuilder primaryAdapter() {
