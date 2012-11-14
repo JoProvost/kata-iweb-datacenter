@@ -1,14 +1,7 @@
 package com.joprovost.kata.datacenter.core.server;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joprovost.kata.datacenter.Server;
-import com.joprovost.kata.datacenter.utils.Helpers;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.io.StringWriter;
 
 import static com.joprovost.kata.datacenter.utils.AddOperation.adding;
 import static com.joprovost.kata.datacenter.utils.Helpers.*;
@@ -18,7 +11,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public class ServerCoreTest {
    @Test

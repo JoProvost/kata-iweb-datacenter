@@ -2,11 +2,8 @@ package com.joprovost.kata.datacenter;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.joprovost.kata.datacenter.adapters.jsonrpc.JsonRpcSecondaryAdapterFactory;
 import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 import com.joprovost.kata.datacenter.core.server.ServerCore;
 
@@ -23,8 +20,8 @@ public class Application {
 
    public static void main(String[] args) throws IOException {
       Application application = fromJson(System.in, Application.class);
-      DatacenterCore datacenter = new DatacenterCore(new JsonRpcSecondaryAdapterFactory());
-      datacenter.registerServers(new ArrayList<Server>(application.servers));
+      DatacenterCore datacenter = new DatacenterCore();
+      datacenter.addServers(new ArrayList<Server>(application.servers));
       for (Vm vm : application.virtualMachines) {
          datacenter.add(vm);
       }

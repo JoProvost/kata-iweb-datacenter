@@ -3,8 +3,6 @@ package com.joprovost.kata.datacenter.utils;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.joprovost.kata.datacenter.Datacenter;
-import com.joprovost.kata.datacenter.core.server.ServerCore;
 import org.hamcrest.Matcher;
 
 import java.io.IOException;
