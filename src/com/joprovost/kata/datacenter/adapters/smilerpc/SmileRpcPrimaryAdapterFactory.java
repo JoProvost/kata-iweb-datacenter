@@ -9,15 +9,17 @@ import com.googlecode.jsonrpc4j.StreamServer;
 import com.joprovost.kata.datacenter.adapters.PrimaryAdapter;
 import com.joprovost.kata.datacenter.adapters.PrimaryAdapterFactory;
 
+import javax.net.ServerSocketFactory;
+import java.io.IOException;
 import java.net.ServerSocket;
 
 public class SmileRpcPrimaryAdapterFactory implements PrimaryAdapterFactory<ServerSocket> {
    @Override
-   public PrimaryAdapter<ServerSocket> createPrimaryAdapter(Object portImplementation, ServerSocket serverSocket) {
+   public PrimaryAdapter createPrimaryAdapter(Object portImplementation, ServerSocket serverSocket) {
       return new JsonRpcSocketServerPrimaryAdapter(portImplementation, serverSocket);
    }
 
-   private static class JsonRpcSocketServerPrimaryAdapter implements PrimaryAdapter<ServerSocket> {
+   private static class JsonRpcSocketServerPrimaryAdapter implements PrimaryAdapter {
       private final StreamServer streamServer;
       private final int maxThreads = 50;
       private final ServerSocket serverSocket;
@@ -37,11 +39,5 @@ public class SmileRpcPrimaryAdapterFactory implements PrimaryAdapterFactory<Serv
       public void stop() throws InterruptedException {
          streamServer.stop();
       }
-
-      @Override
-      public ServerSocket entryPoint() {
-         return serverSocket;
-      }
-
    }
 }

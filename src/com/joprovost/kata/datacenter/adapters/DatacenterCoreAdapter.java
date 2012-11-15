@@ -6,27 +6,30 @@ import com.joprovost.kata.datacenter.Vm;
 import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class DatacenterCoreAdapter implements Datacenter {
 
    private final DatacenterCore datacenterCore;
-   private final SecondaryAdapterFactory<SocketAddress> secondaryAdapterFactory;
+   private final EntityProxyFactory<URI> entityProxyFactory;
 
    public DatacenterCoreAdapter(DatacenterCore datacenterCore,
-                                SecondaryAdapterFactory<SocketAddress> secondaryAdapterFactory) {
+                                EntityProxyFactory<URI> entityProxyFactory) {
       this.datacenterCore = datacenterCore;
-      this.secondaryAdapterFactory = secondaryAdapterFactory;
+      this.entityProxyFactory = entityProxyFactory;
    }
 
    @Override
-   public boolean registerServer(String address, int port) {
+   public boolean registerServer(String uri) {
       try {
-         Server server = secondaryAdapterFactory.createSecondaryAdapter(new InetSocketAddress(address, port), Server.class);
+         Server server = entityProxyFactory.createEntityProxy(new URI(uri), Server.class);
          datacenterCore.addServer(server);
          return true;
       } catch (IOException e) {
+         e.printStackTrace();
+         return false;
+      } catch (URISyntaxException e) {
          e.printStackTrace();
          return false;
       }

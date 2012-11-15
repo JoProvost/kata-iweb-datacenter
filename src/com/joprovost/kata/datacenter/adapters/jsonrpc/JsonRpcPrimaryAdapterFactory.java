@@ -12,11 +12,11 @@ import java.net.ServerSocket;
 
 public class JsonRpcPrimaryAdapterFactory implements PrimaryAdapterFactory<ServerSocket> {
    @Override
-   public PrimaryAdapter<ServerSocket> createPrimaryAdapter(Object portImplementation, ServerSocket serverSocket) {
+   public PrimaryAdapter createPrimaryAdapter(Object portImplementation, ServerSocket serverSocket) {
       return new JsonRpcSocketServerPrimaryAdapter(portImplementation, serverSocket);
    }
 
-   private static class JsonRpcSocketServerPrimaryAdapter implements PrimaryAdapter<ServerSocket> {
+   private static class JsonRpcSocketServerPrimaryAdapter implements PrimaryAdapter {
       private final StreamServer streamServer;
       private final int maxThreads = 50;
       private final ServerSocket serverSocket;
@@ -36,11 +36,5 @@ public class JsonRpcPrimaryAdapterFactory implements PrimaryAdapterFactory<Serve
       public void stop() throws InterruptedException {
          streamServer.stop();
       }
-
-      @Override
-      public ServerSocket entryPoint() {
-         return serverSocket;
-      }
-
    }
 }

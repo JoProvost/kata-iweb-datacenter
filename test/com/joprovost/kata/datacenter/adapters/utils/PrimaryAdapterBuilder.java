@@ -9,13 +9,14 @@ import com.joprovost.kata.datacenter.utils.Builder;
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URI;
 
 import static org.junit.Assert.fail;
 
-public class PrimaryAdapterBuilder implements Builder<PrimaryAdapter<ServerSocket>> {
+public class PrimaryAdapterBuilder implements Builder<PrimaryAdapter> {
    private final PrimaryAdapterFactory<ServerSocket> primaryAdapterFactory;
 
-   private ServerSocket port;
+   private ServerSocket entryPoint;
    private Object portImplementation;
 
    public static PrimaryAdapterBuilder jsonRpcPrimaryAdapter() {
@@ -32,13 +33,13 @@ public class PrimaryAdapterBuilder implements Builder<PrimaryAdapter<ServerSocke
 
 
    @Override
-   public PrimaryAdapter<ServerSocket> build() {
-      return primaryAdapterFactory.createPrimaryAdapter(portImplementation, port);
+   public PrimaryAdapter build() {
+      return primaryAdapterFactory.createPrimaryAdapter(portImplementation, entryPoint);
    }
 
    public PrimaryAdapterBuilder onTcpPort(final int port) {
       try {
-         this.port = ServerSocketFactory.getDefault().createServerSocket(port);
+         this.entryPoint = ServerSocketFactory.getDefault().createServerSocket(port);
       } catch (IOException e) {
          fail(e.getMessage());
       }

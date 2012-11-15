@@ -1,15 +1,15 @@
 package com.joprovost.kata.datacenter.adapters.utils;
 
 import com.joprovost.kata.datacenter.adapters.DatacenterCoreAdapter;
-import com.joprovost.kata.datacenter.adapters.SecondaryAdapterFactory;
+import com.joprovost.kata.datacenter.adapters.EntityProxyFactory;
 import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 import com.joprovost.kata.datacenter.utils.Builder;
 
-import java.net.SocketAddress;
+import java.net.URI;
 
 public class DatacenterCoreAdapterBuilder implements Builder<DatacenterCoreAdapter> {
    private DatacenterCore datacenterCore;
-   private SecondaryAdapterFactory<SocketAddress> secondaryAdapterFactory;
+   private EntityProxyFactory<URI> entityProxyFactory;
 
    public static DatacenterCoreAdapterBuilder datacenterCoreAdapter() {
       return new DatacenterCoreAdapterBuilder();
@@ -17,7 +17,7 @@ public class DatacenterCoreAdapterBuilder implements Builder<DatacenterCoreAdapt
 
    @Override
    public DatacenterCoreAdapter build() {
-      return new DatacenterCoreAdapter(datacenterCore, secondaryAdapterFactory);
+      return new DatacenterCoreAdapter(datacenterCore, entityProxyFactory);
    }
 
    public DatacenterCoreAdapterBuilder of(DatacenterCore datacenterCore) {
@@ -25,8 +25,8 @@ public class DatacenterCoreAdapterBuilder implements Builder<DatacenterCoreAdapt
       return this;
    }
 
-   public DatacenterCoreAdapterBuilder using(SecondaryAdapterFactory<SocketAddress> secondaryAdapterFactory) {
-      this.secondaryAdapterFactory = secondaryAdapterFactory;
+   public DatacenterCoreAdapterBuilder using(EntityProxyFactory<URI> entityProxyFactory) {
+      this.entityProxyFactory = entityProxyFactory;
       return this;
    }
 }

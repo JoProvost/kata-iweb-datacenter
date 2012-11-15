@@ -2,8 +2,8 @@ package com.joprovost.kata.datacenter.adapters;
 
 import com.joprovost.kata.datacenter.Server;
 import com.joprovost.kata.datacenter.Vm;
-import com.joprovost.kata.datacenter.adapters.jsonrpc.JsonRpcSecondaryAdapterFactory;
-import com.joprovost.kata.datacenter.adapters.smilerpc.SmileRpcSecondaryAdapterFactory;
+import com.joprovost.kata.datacenter.adapters.jsonrpc.JsonRpcEntityProxyFactory;
+import com.joprovost.kata.datacenter.adapters.smilerpc.SmileRpcEntityProxyFactory;
 import com.joprovost.kata.datacenter.core.datacenter.DatacenterCore;
 import org.junit.After;
 import org.junit.Test;
@@ -34,10 +34,10 @@ public class DatacenterCoreAdapterTest {
 
       DatacenterCore theDatacenter;
       assertThat(
-            registeringTheServerAt("127.0.0.1", 34568)
+            registeringTheServerAt("json-rpc://127.0.0.1:34568")
                   .to(a(datacenterCoreAdapter()
                         .of(theDatacenter = a(datacenter()))
-                        .using(new JsonRpcSecondaryAdapterFactory()))),
+                        .using(new JsonRpcEntityProxyFactory()))),
             works());
 
       Vm theVm;
@@ -55,10 +55,10 @@ public class DatacenterCoreAdapterTest {
 
       DatacenterCore theDatacenter;
       assertThat(
-            registeringTheServerAt("127.0.0.1", 34568)
+            registeringTheServerAt("json-rpc://127.0.0.1:34568")
                   .to(a(datacenterCoreAdapter()
                         .of(theDatacenter = a(datacenter()))
-                        .using(new SmileRpcSecondaryAdapterFactory()))),
+                        .using(new SmileRpcEntityProxyFactory()))),
             works());
 
       Vm theVm;
@@ -69,6 +69,31 @@ public class DatacenterCoreAdapterTest {
       andThat(theServer.contains(theVm));
    }
 
+
+   @Test
+   public void addingAVmToADatacenterAssociatedToAJsoneAndASmileRpcServerAddsTheVmToTheServers() throws Exception {
+      final DatacenterCore theDatacenter = a(datacenter());
+      final DatacenterCoreAdapter theDatacenterCoreAdapter = a(datacenterCoreAdapter()
+            .of(theDatacenter)
+            .using(new MappingEntityProxyFactory() {{
+               registerScheme("json-rpc", new JsonRpcEntityProxyFactory());
+               registerScheme("smile-rpc", new SmileRpcEntityProxyFactory());
+            }}));
+
+      final Server theJsonServer;
+      final Vm theVm;
+      given(a(jsonRpcPrimaryAdapter().onTcpPort(34568).of(theJsonServer = a(server().withCapacity(2)))));
+      assertThat(registeringTheServerAt("json-rpc://127.0.0.1:34568").to(theDatacenterCoreAdapter),works());
+      assertThat(adding(theVm = a(vm().withSize(2).withId("allo"))).to(theDatacenter),works());
+      andThat(theJsonServer.contains(theVm));
+
+      final Server theSmileServer;
+      final Vm theOtherVm;
+      given(a(smileRpcPrimaryAdapter().onTcpPort(34569).of(theSmileServer = a(server().withCapacity(2)))));
+      assertThat(registeringTheServerAt("smile-rpc://127.0.0.1:34569").to(theDatacenterCoreAdapter),works());
+      assertThat(adding(theOtherVm = a(vm().withSize(2).withId("allo"))).to(theDatacenter),works());
+      andThat(theSmileServer.contains(theOtherVm));
+   }
 
    @After
    public void stopServices() throws Exception {
